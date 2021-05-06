@@ -112,7 +112,7 @@ public class EventEntity {
   /**
    * The type Event builder.
    */
-  public static class EventBuilder {
+  public static class EventEntityBuilder {
     /**
      * The Event payload bytes.
      */
@@ -128,7 +128,7 @@ public class EventEntity {
      * @param eventPayload the event payload
      * @return the event builder
      */
-    public EventBuilder eventPayload(final String eventPayload) {
+    public EventEntity.EventEntityBuilder eventPayload(final String eventPayload) {
       this.eventPayload = eventPayload;
       this.eventPayloadBytes = eventPayload.getBytes(StandardCharsets.UTF_8);
       return this;
