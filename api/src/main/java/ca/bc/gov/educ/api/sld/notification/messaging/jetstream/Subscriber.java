@@ -31,8 +31,17 @@ import java.util.Map;
 @Slf4j
 public class Subscriber {
 
+  /**
+   * The Event handler delegator service.
+   */
   private final EventHandlerDelegatorService eventHandlerDelegatorService;
+  /**
+   * The Stream topics map.
+   */
   private final Map<String, List<String>> streamTopicsMap = new HashMap<>(); // one stream can have multiple topics.
+  /**
+   * The Nats connection.
+   */
   private final Connection natsConnection;
 
   /**
@@ -49,7 +58,7 @@ public class Subscriber {
   }
 
   /**
-   * this is the source of truth for all the topics this api subscribes to.
+   * Initialize stream topic map.
    */
   private void initializeStreamTopicMap() {
     List<String> penServicesEventsTopics = new ArrayList<>();
@@ -79,10 +88,9 @@ public class Subscriber {
   }
 
   /**
-   * This method will process the event message pushed into different topics of different APIS.
-   * All APIs publish ChoreographedEvent
+   * On message.
    *
-   * @param message the string representation of {@link ChoreographedEvent} if it not type of event then it will throw exception and will be ignored.
+   * @param message the message
    */
   public void onMessage(final Message message) {
     if (message != null) {

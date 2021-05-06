@@ -44,7 +44,7 @@ public class NatsConnection implements Closeable {
   /**
    * Connect to nats connection.
    *
-   * @param natsUrl       the stan url
+   * @param natsUrl       the nats url
    * @param maxReconnects the max reconnects
    * @return the connection
    * @throws IOException          the io exception

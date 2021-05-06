@@ -5,7 +5,7 @@ package ca.bc.gov.educ.api.sld.notification.constants;
  */
 public enum Topics {
   /**
-   * Pen services events topic topics.
+   * The Pen services events topic.
    */
   PEN_SERVICES_EVENTS_TOPIC
 }

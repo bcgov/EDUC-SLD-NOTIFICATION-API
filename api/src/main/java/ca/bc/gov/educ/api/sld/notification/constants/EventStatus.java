@@ -5,11 +5,11 @@ package ca.bc.gov.educ.api.sld.notification.constants;
  */
 public enum EventStatus {
   /**
-   * Db committed event status.
+   * The Db committed.
    */
   DB_COMMITTED,
   /**
-   * Processed event status.
+   * The Processed.
    */
   PROCESSED
 }

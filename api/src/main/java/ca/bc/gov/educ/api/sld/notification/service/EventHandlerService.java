@@ -5,14 +5,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * The interface Event service.
+ * The interface Event handler service.
  */
 public interface EventHandlerService {
 
   /**
    * Process event.
    *
-   * @param eventEntity the event
+   * @param eventEntity the event entity
    * @throws JsonProcessingException the json processing exception
    */
   @Transactional

@@ -16,6 +16,9 @@ import java.util.concurrent.CompletableFuture;
 public class MessagePublisher {
 
 
+  /**
+   * The Connection.
+   */
   private final Connection connection;
 
   /**
@@ -39,11 +42,11 @@ public class MessagePublisher {
   }
 
   /**
-   * Synchronous req/res call similar to a REST call.
+   * Request message completable future.
    *
-   * @param subject the topic which the message will be sent to.
-   * @param message the payload.
-   * @return the nats message when it is completed.
+   * @param subject the subject
+   * @param message the message
+   * @return the completable future
    */
   public CompletableFuture<Message> requestMessage(final String subject, final byte[] message) {
     return this.connection.request(subject, message);

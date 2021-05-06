@@ -11,13 +11,19 @@ import org.springframework.stereotype.Service;
 
 
 /**
- * This class is responsible to process events from Jet Stream.
+ * The type Event handler delegator service.
  */
 @Service
 @Slf4j
 public class EventHandlerDelegatorService {
 
+  /**
+   * The Choreographed event persistence service.
+   */
   private final ChoreographedEventPersistenceService choreographedEventPersistenceService;
+  /**
+   * The Student choreographer.
+   */
   private final StudentChoreographer studentChoreographer;
 
   /**
@@ -33,10 +39,7 @@ public class EventHandlerDelegatorService {
   }
 
   /**
-   * this method will do the following.
-   * 1. Call service to store the event in oracle DB.
-   * 2. Acknowledge to  Jet Stream only when the service call is completed. since it uses manual acknowledgement.
-   * 3. Hand off the task to update RDB onto a different executor.
+   * Handle choreography event.
    *
    * @param choreographedEvent the choreographed event
    * @param message            the message

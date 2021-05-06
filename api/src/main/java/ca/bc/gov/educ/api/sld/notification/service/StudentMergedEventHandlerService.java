@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 
 /**
- * The type Student create merge service.
+ * The type Student merged event handler service.
  */
 @Service
 @Slf4j
@@ -18,7 +18,7 @@ public class StudentMergedEventHandlerService extends BaseStudentMergeEventHandl
 
 
   /**
-   * Instantiates a new Student create merge service.
+   * Instantiates a new Student merged event handler service.
    *
    * @param eventRepository       the event repository
    * @param applicationProperties the application properties

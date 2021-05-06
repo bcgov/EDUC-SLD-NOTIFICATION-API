@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
 import static ca.bc.gov.educ.api.sld.notification.struct.v1.EventType.*;
 
 /**
- * The type Base student service.
+ * The type Base student merge event handler service.
  */
 @Slf4j
 public abstract class BaseStudentMergeEventHandlerService implements EventHandlerService {
@@ -57,6 +57,9 @@ public abstract class BaseStudentMergeEventHandlerService implements EventHandle
    * The Message publisher.
    */
   protected final MessagePublisher messagePublisher;
+  /**
+   * The Object mapper.
+   */
   private final ObjectMapper objectMapper = new ObjectMapper();
 
   /**
@@ -101,7 +104,10 @@ public abstract class BaseStudentMergeEventHandlerService implements EventHandle
 
 
   /**
-   * if the toEmail is blank mark the record as processed , as system is not going to notify.
+   * Process merge to.
+   *
+   * @param studentMerge the student merge
+   * @throws BusinessException the business exception
    */
   @SneakyThrows({JsonProcessingException.class})
   private void processMergeTO(final StudentMerge studentMerge) throws BusinessException {
@@ -144,6 +150,13 @@ public abstract class BaseStudentMergeEventHandlerService implements EventHandle
   }
 
 
+  /**
+   * Process students merge info.
+   *
+   * @param student     the student
+   * @param trueStudent the true student
+   * @throws BusinessException the business exception
+   */
   @SneakyThrows({JsonProcessingException.class})
   private void processStudentsMergeInfo(final Student student, final Student trueStudent) throws BusinessException {
     val updateSldStudentEvent = Event.builder().eventType(UPDATE_SLD_STUDENTS).eventPayload(JsonUtil.getJsonStringFromObject(SldUpdateStudentsEvent.builder().pen(student.getPen()).sldStudent(SldStudent.builder().pen(trueStudent.getPen()).build()).build())).build();
@@ -175,6 +188,12 @@ public abstract class BaseStudentMergeEventHandlerService implements EventHandle
 
   }
 
+  /**
+   * Merge to predicate boolean.
+   *
+   * @param studentMerge the student merge
+   * @return the boolean
+   */
   private boolean mergeToPredicate(final StudentMerge studentMerge) {
     return StringUtils.equals(studentMerge.getStudentMergeDirectionCode(), "TO");
   }

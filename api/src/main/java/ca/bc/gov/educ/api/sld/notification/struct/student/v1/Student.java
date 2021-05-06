@@ -20,6 +20,9 @@ import java.io.Serializable;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @SuppressWarnings("java:S1948")
 public class Student implements Serializable {
+  /**
+   * The constant serialVersionUID.
+   */
   private static final long serialVersionUID = 2992222390789907602L;
   /**
    * The Student id.

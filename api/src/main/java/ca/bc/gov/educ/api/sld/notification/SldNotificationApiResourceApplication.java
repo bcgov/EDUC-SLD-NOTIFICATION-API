@@ -14,7 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
- * The type Trax notification api resource application.
+ * The type Sld notification api resource application.
  */
 @SpringBootApplication
 @EnableGlobalMethodSecurity(prePostEnabled = true)

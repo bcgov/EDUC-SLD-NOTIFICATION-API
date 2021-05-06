@@ -14,8 +14,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * This class is responsible to check the SLD_NOTIFICATION_EVENT table periodically and process them if they are not yet processed.
- * this is a very edge case scenario which will occur.
+ * The type Jet stream event scheduler.
  */
 @Component
 @Slf4j
@@ -26,11 +25,14 @@ public class JetStreamEventScheduler {
    */
   private final EventRepository eventRepository;
 
+  /**
+   * The Student choreographer.
+   */
   private final StudentChoreographer studentChoreographer;
 
 
   /**
-   * Instantiates a new Stan event scheduler.
+   * Instantiates a new Jet stream event scheduler.
    *
    * @param eventRepository      the event repository
    * @param studentChoreographer the student choreographer
@@ -41,7 +43,7 @@ public class JetStreamEventScheduler {
   }
 
   /**
-   * Find and publish student events to jet stream.
+   * Find and process events.
    */
   @Scheduled(cron = "${cron.scheduled.process.events.stan}") // every 5 minutes
   @SchedulerLock(name = "PROCESS_CHOREOGRAPHED_EVENTS_FROM_JET_STREAM", lockAtLeastFor = "${cron.scheduled.process.events.stan.lockAtLeastFor}", lockAtMostFor = "${cron.scheduled.process.events" +

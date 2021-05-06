@@ -5,31 +5,31 @@ package ca.bc.gov.educ.api.sld.notification.struct.v1;
  */
 public enum EventOutcome {
   /**
-   * Possible match added event outcome.
+   * The Possible match added.
    */
   POSSIBLE_MATCH_ADDED,
   /**
-   * Possible match deleted event outcome.
+   * The Possible match deleted.
    */
   POSSIBLE_MATCH_DELETED,
   /**
-   * Student created event outcome.
+   * The Student created.
    */
   STUDENT_CREATED,
   /**
-   * Merge created event outcome.
+   * The Merge created.
    */
   MERGE_CREATED,
   /**
-   * Student updated event outcome.
+   * The Student updated.
    */
   STUDENT_UPDATED,
   /**
-   * Merge deleted event outcome.
+   * The Merge deleted.
    */
   MERGE_DELETED,
   /**
-   * Student not found event outcome.
+   * The Student not found.
    */
   STUDENT_NOT_FOUND
 }

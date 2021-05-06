@@ -17,6 +17,9 @@ import java.io.Serializable;
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class StudentMerge implements Serializable {
+  /**
+   * The constant serialVersionUID.
+   */
   private static final long serialVersionUID = -8133441569621088814L;
   /**
    * The Student merge id.

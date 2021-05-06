@@ -5,44 +5,44 @@ package ca.bc.gov.educ.api.sld.notification.struct.v1;
  */
 public enum EventType {
   /**
-   * Create student event type.
+   * The Create student.
    */
   CREATE_STUDENT,
   /**
-   * Update student event type.
+   * The Update student.
    */
   UPDATE_STUDENT,
   /**
-   * Add possible match event type.
+   * The Add possible match.
    */
   ADD_POSSIBLE_MATCH,
   /**
-   * Delete possible match event type.
+   * The Delete possible match.
    */
   DELETE_POSSIBLE_MATCH,
   /**
-   * Create merge event type.
+   * The Create merge.
    */
   CREATE_MERGE,
 
   /**
-   * Delete Merge Data.
+   * The Delete merge.
    */
   DELETE_MERGE,
   /**
-   * Get students event type.
+   * The Get students.
    */
   GET_STUDENTS,
   /**
-   * Update sld students event type.
+   * The Update sld students.
    */
   UPDATE_SLD_STUDENTS,
   /**
-   * Update sld dia students event type.
+   * The Update sld dia students.
    */
   UPDATE_SLD_DIA_STUDENTS,
   /**
-   * Update sld student programs event type.
+   * The Update sld student programs.
    */
   UPDATE_SLD_STUDENT_PROGRAMS,
 }

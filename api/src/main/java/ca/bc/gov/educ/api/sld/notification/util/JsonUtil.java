@@ -9,6 +9,9 @@ import java.io.IOException;
  * The type Json util.
  */
 public final class JsonUtil {
+  /**
+   * The constant objectMapper.
+   */
   private static final ObjectMapper objectMapper = new ObjectMapper();
 
   /**

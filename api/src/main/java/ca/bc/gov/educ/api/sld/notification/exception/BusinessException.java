@@ -8,6 +8,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class BusinessException extends Exception {
 
+  /**
+   * The constant serialVersionUID.
+   */
   private static final long serialVersionUID = -4128980175291948277L;
 
   /**

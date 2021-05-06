@@ -6,9 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /**
- * Class holds all application properties
- *
- * @author Marco Villeneuve
+ * The type Application properties.
  */
 @Component
 @Getter
@@ -19,7 +17,7 @@ public class ApplicationProperties {
    */
   public static final String API_NAME = "SLD-NOTIFICATION-API";
   /**
-   * The Stan url.
+   * The Nats url.
    */
   @Value("${nats.url}")
   String natsUrl;

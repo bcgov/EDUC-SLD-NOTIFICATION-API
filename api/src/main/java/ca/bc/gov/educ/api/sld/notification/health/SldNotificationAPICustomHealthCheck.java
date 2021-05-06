@@ -6,21 +6,21 @@ import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.stereotype.Component;
 
 /**
- * The type Pen match api custom health check.
+ * The type Sld notification api custom health check.
  */
 @Component
-public class TraxNotificationAPICustomHealthCheck implements HealthIndicator {
+public class SldNotificationAPICustomHealthCheck implements HealthIndicator {
   /**
    * The Nats connection.
    */
   private final Connection natsConnection;
 
   /**
-   * Instantiates a new Pen match api custom health check.
+   * Instantiates a new Sld notification api custom health check.
    *
    * @param natsConnection the nats connection
    */
-  public TraxNotificationAPICustomHealthCheck(final Connection natsConnection) {
+  public SldNotificationAPICustomHealthCheck(final Connection natsConnection) {
     this.natsConnection = natsConnection;
   }
 

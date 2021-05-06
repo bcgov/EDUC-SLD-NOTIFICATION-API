@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * The type sld update dia students event.
+ * The type Sld update dia students event.
  */
 @Data
 @Builder
@@ -14,12 +14,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SldUpdateDiaStudentsEvent {
   /**
-   * the PEN which is used to search the sld dia students.
+   * The Pen.
    */
   private String pen;
   /**
-   * the attributes of sld record to be updated.
-   * Leave the attribute null if no update.
+   * The Sld dia student.
    */
   private SldDiaStudent sldDiaStudent;
 }

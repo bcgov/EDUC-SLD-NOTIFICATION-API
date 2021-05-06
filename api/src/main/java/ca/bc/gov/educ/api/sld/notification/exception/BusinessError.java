@@ -18,9 +18,17 @@ public enum BusinessError {
    * The Sld update failed.
    */
   SLD_UPDATE_FAILED("Update from SLD API failed, this should not have happened, will be retried.");
+  /**
+   * The Code.
+   */
   @Getter
   private final String code;
 
+  /**
+   * Instantiates a new Business error.
+   *
+   * @param code the code
+   */
   BusinessError(String code) {
     this.code = code;
 

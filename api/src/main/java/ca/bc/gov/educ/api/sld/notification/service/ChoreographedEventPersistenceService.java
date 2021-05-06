@@ -23,6 +23,9 @@ import java.time.LocalDateTime;
 @Service
 @Slf4j
 public class ChoreographedEventPersistenceService {
+  /**
+   * The Event repository.
+   */
   private final EventRepository eventRepository;
 
   /**
@@ -36,10 +39,10 @@ public class ChoreographedEventPersistenceService {
   }
 
   /**
-   * Persist event to db event.
+   * Persist event to db event entity.
    *
    * @param choreographedEvent the choreographed event
-   * @return the event
+   * @return the event entity
    * @throws BusinessException the business exception
    */
   @Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -54,8 +57,8 @@ public class ChoreographedEventPersistenceService {
       .eventOutcome(choreographedEvent.getEventOutcome().toString())
       .eventPayload(choreographedEvent.getEventPayload())
       .eventStatus(EventStatus.DB_COMMITTED.toString())
-      .createUser(StringUtils.isBlank(choreographedEvent.getCreateUser()) ? "TRAX-NOTIFICATION-API" : choreographedEvent.getCreateUser())
-      .updateUser(StringUtils.isBlank(choreographedEvent.getUpdateUser()) ? "TRAX-NOTIFICATION-API" : choreographedEvent.getUpdateUser())
+      .createUser(StringUtils.isBlank(choreographedEvent.getCreateUser()) ? "SLD-NOTIFICATION-API" : choreographedEvent.getCreateUser())
+      .updateUser(StringUtils.isBlank(choreographedEvent.getUpdateUser()) ? "SLD-NOTIFICATION-API" : choreographedEvent.getUpdateUser())
       .createDate(LocalDateTime.now())
       .updateDate(LocalDateTime.now())
       .build();

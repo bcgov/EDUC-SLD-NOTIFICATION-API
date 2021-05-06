@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 /**
- * The type Pen match event.
+ * The type Event entity.
  */
 @AllArgsConstructor
 @NoArgsConstructor
@@ -44,6 +44,9 @@ public class EventEntity {
   @Column(name = "UPDATE_DATE")
   @PastOrPresent
   LocalDateTime updateDate;
+  /**
+   * The Sld notification event id.
+   */
   @Id
   @GeneratedValue(generator = "UUID")
   @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator", parameters = {
@@ -56,7 +59,7 @@ public class EventEntity {
   @Column(name = "EVENT_ID", unique = true, updatable = false, columnDefinition = "BINARY(16)")
   private UUID eventId;
   /**
-   * The Event payload.
+   * The Event payload bytes.
    */
   @NotNull(message = "eventPayload cannot be null")
   @Lob
@@ -82,6 +85,9 @@ public class EventEntity {
   @Column(name = "EVENT_OUTCOME")
   private String eventOutcome;
 
+  /**
+   * The Event payload.
+   */
   @Transient
   private String eventPayload; // for toString purpose only, easier to read and debug than byte[]
 
@@ -104,7 +110,7 @@ public class EventEntity {
   }
 
   /**
-   * The type Student event builder.
+   * The type Event builder.
    */
   public static class EventBuilder {
     /**
@@ -117,10 +123,10 @@ public class EventEntity {
     String eventPayload;
 
     /**
-     * Event payload student event . student event builder.
+     * Event payload event builder.
      *
      * @param eventPayload the event payload
-     * @return the student event . student event builder
+     * @return the event builder
      */
     public EventBuilder eventPayload(final String eventPayload) {
       this.eventPayload = eventPayload;

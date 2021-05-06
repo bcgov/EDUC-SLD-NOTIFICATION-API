@@ -17,20 +17,26 @@ import java.util.stream.Collectors;
 
 
 /**
- * This class is responsible to handle different choreographed events related student by calling different services.
+ * The type Student choreographer.
  */
 @Component
 @Slf4j
 public class StudentChoreographer {
+  /**
+   * The Task executor.
+   */
   private final Executor taskExecutor = new EnhancedQueueExecutor.Builder()
     .setThreadFactory(new ThreadFactoryBuilder().setNameFormat("task-executor-%d").build())
     .setCorePoolSize(2).setMaximumPoolSize(2).build();
+  /**
+   * The Event service map.
+   */
   private final Map<String, EventHandlerService> eventServiceMap;
 
   /**
    * Instantiates a new Student choreographer.
    *
-   * @param eventHandlerServices the event services
+   * @param eventHandlerServices the event handler services
    */
   public StudentChoreographer(final List<EventHandlerService> eventHandlerServices) {
     this.eventServiceMap = eventHandlerServices.stream().collect(Collectors.toMap(EventHandlerService::getEventType, Function.identity()));
@@ -39,7 +45,7 @@ public class StudentChoreographer {
   /**
    * Handle event.
    *
-   * @param eventEntity the event
+   * @param eventEntity the event entity
    */
   public void handleEvent(@NonNull final EventEntity eventEntity) {
     this.taskExecutor.execute(() -> {
