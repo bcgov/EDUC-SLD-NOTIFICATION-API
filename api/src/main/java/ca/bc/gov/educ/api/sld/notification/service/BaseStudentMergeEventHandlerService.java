@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -164,19 +165,23 @@ public abstract class BaseStudentMergeEventHandlerService implements EventHandle
     val updateStudentProgramsEvent = Event.builder().eventType(UPDATE_SLD_STUDENT_PROGRAMS).eventPayload(JsonUtil.getJsonStringFromObject(SldUpdateStudentProgramsEvent.builder().pen(student.getPen()).sldStudentProgram(SldStudentProgram.builder().pen(trueStudent.getPen()).build()).build())).build();
     log.info("called SLD_API to update");
     var i = 0;
+    var isUpdated = false;
     while (i < 3) {
       try {
-        val futureSldStudentResponse = this.messagePublisher.requestMessage(SLD_API_TOPIC, JsonUtil.getJsonBytesFromObject(updateSldStudentEvent));
-        val futureSldDiaStudentResponse = this.messagePublisher.requestMessage(SLD_API_TOPIC, JsonUtil.getJsonBytesFromObject(updateDiaStudentsEvent));
-        val futureSldStudentProgramResponse = this.messagePublisher.requestMessage(SLD_API_TOPIC, JsonUtil.getJsonBytesFromObject(updateStudentProgramsEvent));
-        val sldStudentResponseData = futureSldStudentResponse.get(5, TimeUnit.SECONDS).getData();
-        val sldDiaStudentResponseData = futureSldDiaStudentResponse.get(5, TimeUnit.SECONDS).getData();
-        val sldStudentProgramResponseData = futureSldStudentProgramResponse.get(5, TimeUnit.SECONDS).getData();
-        if (sldDiaStudentResponseData.length > 0 && sldStudentResponseData.length > 0 && sldStudentProgramResponseData.length > 0) {
+        val futureSldStudentResponse = this.messagePublisher.requestMessage(SLD_API_TOPIC, JsonUtil.getJsonBytesFromObject(updateSldStudentEvent)).completeOnTimeout(null, 5, TimeUnit.SECONDS);
+        val futureSldDiaStudentResponse = this.messagePublisher.requestMessage(SLD_API_TOPIC, JsonUtil.getJsonBytesFromObject(updateDiaStudentsEvent)).completeOnTimeout(null, 5, TimeUnit.SECONDS);
+        val futureSldStudentProgramResponse = this.messagePublisher.requestMessage(SLD_API_TOPIC, JsonUtil.getJsonBytesFromObject(updateStudentProgramsEvent)).completeOnTimeout(null, 5, TimeUnit.SECONDS);
+        val combinedFuture = CompletableFuture.allOf(futureSldStudentResponse, futureSldDiaStudentResponse, futureSldStudentProgramResponse);
+        combinedFuture.get();
+        val sldStudentResponseData = futureSldStudentResponse.get();
+        val sldDiaStudentResponseData = futureSldDiaStudentResponse.get();
+        val sldStudentProgramResponseData = futureSldStudentProgramResponse.get();
+        if (sldStudentResponseData != null && sldDiaStudentResponseData != null && sldStudentProgramResponseData != null && sldDiaStudentResponseData.getData().length > 0 && sldStudentResponseData.getData().length > 0 && sldStudentProgramResponseData.getData().length > 0) {
           log.info("got response for all 3 updates from SLD_API");
           i = 3;
+          isUpdated = true;
         }
-      } catch (final IOException | ExecutionException | TimeoutException e) {
+      } catch (final IOException | ExecutionException e) {
         log.error("exception while updating sld data", e);
         i++;
       } catch (final InterruptedException e) {
@@ -185,6 +190,9 @@ public abstract class BaseStudentMergeEventHandlerService implements EventHandle
         i++;
       }
     }
+/*    if (!isUpdated) {
+      throw new BusinessException(BusinessError.SLD_UPDATE_FAILED); // it will be retried again.
+    }*/
 
   }
 
