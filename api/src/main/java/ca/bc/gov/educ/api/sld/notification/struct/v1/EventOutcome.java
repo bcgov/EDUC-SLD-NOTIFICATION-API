@@ -31,5 +31,9 @@ public enum EventOutcome {
   /**
    * The Student not found.
    */
-  STUDENT_NOT_FOUND
+  STUDENT_NOT_FOUND,
+  /**
+   * Students found event outcome.
+   */
+  STUDENTS_FOUND
 }
