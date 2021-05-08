@@ -27,5 +27,5 @@ public interface EventRepository extends JpaRepository<EventEntity, UUID> {
    * @param eventStatus the event status
    * @return the list
    */
-  List<EventEntity> findAllByEventStatus(String eventStatus);
+  List<EventEntity> findAllByEventStatusOrderByCreateDate(String eventStatus);
 }
