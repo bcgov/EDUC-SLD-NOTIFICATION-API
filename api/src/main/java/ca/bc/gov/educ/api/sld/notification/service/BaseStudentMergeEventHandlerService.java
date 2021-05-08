@@ -28,7 +28,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -171,8 +170,6 @@ public abstract class BaseStudentMergeEventHandlerService implements EventHandle
         val futureSldStudentResponse = this.messagePublisher.requestMessage(SLD_API_TOPIC, JsonUtil.getJsonBytesFromObject(updateSldStudentEvent)).completeOnTimeout(null, 5, TimeUnit.SECONDS);
         val futureSldDiaStudentResponse = this.messagePublisher.requestMessage(SLD_API_TOPIC, JsonUtil.getJsonBytesFromObject(updateDiaStudentsEvent)).completeOnTimeout(null, 5, TimeUnit.SECONDS);
         val futureSldStudentProgramResponse = this.messagePublisher.requestMessage(SLD_API_TOPIC, JsonUtil.getJsonBytesFromObject(updateStudentProgramsEvent)).completeOnTimeout(null, 5, TimeUnit.SECONDS);
-        val combinedFuture = CompletableFuture.allOf(futureSldStudentResponse, futureSldDiaStudentResponse, futureSldStudentProgramResponse);
-        combinedFuture.get();
         val sldStudentResponseData = futureSldStudentResponse.get();
         val sldDiaStudentResponseData = futureSldDiaStudentResponse.get();
         val sldStudentProgramResponseData = futureSldStudentProgramResponse.get();
