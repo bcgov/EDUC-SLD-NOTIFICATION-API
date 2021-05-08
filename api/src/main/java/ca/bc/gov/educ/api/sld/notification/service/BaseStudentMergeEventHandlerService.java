@@ -178,6 +178,7 @@ public abstract class BaseStudentMergeEventHandlerService implements EventHandle
           i = 3;
           isUpdated = true;
         }
+        i++;
       } catch (final IOException | ExecutionException e) {
         log.error("exception while updating sld data", e);
         i++;
