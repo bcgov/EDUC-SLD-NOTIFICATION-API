@@ -10,7 +10,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.stream.Collectors;
 
 
 /**
@@ -50,10 +49,9 @@ public class JetStreamEventScheduler {
     ".stan.lockAtMostFor}")
   public void findAndProcessEvents() {
     LockAssert.assertLocked();
-    this.eventRepository.findAllByEventStatus(EventStatus.DB_COMMITTED.toString())
+    this.eventRepository.findAllByEventStatusOrderByCreateDate(EventStatus.DB_COMMITTED.toString())
       .stream()
       .filter(el -> el.getUpdateDate().isBefore(LocalDateTime.now().minusMinutes(5)))
-      .collect(Collectors.toList())
       .forEach(this.studentChoreographer::handleEvent);
   }
 }
