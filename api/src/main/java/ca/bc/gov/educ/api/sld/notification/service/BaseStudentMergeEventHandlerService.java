@@ -162,11 +162,11 @@ public abstract class BaseStudentMergeEventHandlerService implements EventHandle
     val updateSldStudentEvent = Event.builder().eventType(UPDATE_SLD_STUDENTS).eventPayload(JsonUtil.getJsonStringFromObject(SldUpdateStudentsEvent.builder().pen(student.getPen()).sldStudent(SldStudent.builder().pen(trueStudent.getPen()).build()).build())).build();
     val updateDiaStudentsEvent = Event.builder().eventType(UPDATE_SLD_DIA_STUDENTS).eventPayload(JsonUtil.getJsonStringFromObject(SldUpdateDiaStudentsEvent.builder().pen(student.getPen()).sldDiaStudent(SldDiaStudent.builder().pen(trueStudent.getPen()).build()).build())).build();
     val updateStudentProgramsEvent = Event.builder().eventType(UPDATE_SLD_STUDENT_PROGRAMS).eventPayload(JsonUtil.getJsonStringFromObject(SldUpdateStudentProgramsEvent.builder().pen(student.getPen()).sldStudentProgram(SldStudentProgram.builder().pen(trueStudent.getPen()).build()).build())).build();
-    log.info("called SLD_API to update");
     var i = 0;
     var isUpdated = false;
     while (i < 3) {
       try {
+        log.info("called SLD_API to update");
         val futureSldStudentResponse = this.messagePublisher.requestMessage(SLD_API_TOPIC, JsonUtil.getJsonBytesFromObject(updateSldStudentEvent)).completeOnTimeout(null, 5, TimeUnit.SECONDS);
         val futureSldDiaStudentResponse = this.messagePublisher.requestMessage(SLD_API_TOPIC, JsonUtil.getJsonBytesFromObject(updateDiaStudentsEvent)).completeOnTimeout(null, 5, TimeUnit.SECONDS);
         val futureSldStudentProgramResponse = this.messagePublisher.requestMessage(SLD_API_TOPIC, JsonUtil.getJsonBytesFromObject(updateStudentProgramsEvent)).completeOnTimeout(null, 5, TimeUnit.SECONDS);
