@@ -188,9 +188,9 @@ public abstract class BaseStudentMergeEventHandlerService implements EventHandle
         i++;
       }
     }
-/*    if (!isUpdated) {
+    if (!isUpdated) {
       throw new BusinessException(BusinessError.SLD_UPDATE_FAILED); // it will be retried again.
-    }*/
+    }
 
   }
 
