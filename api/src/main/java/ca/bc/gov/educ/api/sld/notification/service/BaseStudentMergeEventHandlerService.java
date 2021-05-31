@@ -167,12 +167,9 @@ public abstract class BaseStudentMergeEventHandlerService implements EventHandle
     while (i < 3) {
       try {
         log.info("called SLD_API to update");
-        val futureSldStudentResponse = this.messagePublisher.requestMessage(SLD_API_TOPIC, JsonUtil.getJsonBytesFromObject(updateSldStudentEvent)).completeOnTimeout(null, 5, TimeUnit.SECONDS);
-        val futureSldDiaStudentResponse = this.messagePublisher.requestMessage(SLD_API_TOPIC, JsonUtil.getJsonBytesFromObject(updateDiaStudentsEvent)).completeOnTimeout(null, 5, TimeUnit.SECONDS);
-        val futureSldStudentProgramResponse = this.messagePublisher.requestMessage(SLD_API_TOPIC, JsonUtil.getJsonBytesFromObject(updateStudentProgramsEvent)).completeOnTimeout(null, 5, TimeUnit.SECONDS);
-        val sldStudentResponseData = futureSldStudentResponse.get();
-        val sldDiaStudentResponseData = futureSldDiaStudentResponse.get();
-        val sldStudentProgramResponseData = futureSldStudentProgramResponse.get();
+        val sldStudentResponseData = this.messagePublisher.requestMessage(SLD_API_TOPIC, JsonUtil.getJsonBytesFromObject(updateSldStudentEvent)).completeOnTimeout(null, 5, TimeUnit.SECONDS).get();
+        val sldDiaStudentResponseData = this.messagePublisher.requestMessage(SLD_API_TOPIC, JsonUtil.getJsonBytesFromObject(updateDiaStudentsEvent)).completeOnTimeout(null, 5, TimeUnit.SECONDS).get();
+        val sldStudentProgramResponseData = this.messagePublisher.requestMessage(SLD_API_TOPIC, JsonUtil.getJsonBytesFromObject(updateStudentProgramsEvent)).completeOnTimeout(null, 5, TimeUnit.SECONDS).get();
         if (sldStudentResponseData != null && sldDiaStudentResponseData != null && sldStudentProgramResponseData != null && sldDiaStudentResponseData.getData().length > 0 && sldStudentResponseData.getData().length > 0 && sldStudentProgramResponseData.getData().length > 0) {
           log.info("got response for all 3 updates from SLD_API");
           i = 3;
