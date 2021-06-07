@@ -162,32 +162,30 @@ public abstract class BaseStudentMergeEventHandlerService implements EventHandle
     val updateSldStudentEvent = Event.builder().eventType(UPDATE_SLD_STUDENTS).eventPayload(JsonUtil.getJsonStringFromObject(SldUpdateStudentsEvent.builder().pen(student.getPen()).sldStudent(SldStudent.builder().pen(trueStudent.getPen()).build()).build())).build();
     val updateDiaStudentsEvent = Event.builder().eventType(UPDATE_SLD_DIA_STUDENTS).eventPayload(JsonUtil.getJsonStringFromObject(SldUpdateDiaStudentsEvent.builder().pen(student.getPen()).sldDiaStudent(SldDiaStudent.builder().pen(trueStudent.getPen()).build()).build())).build();
     val updateStudentProgramsEvent = Event.builder().eventType(UPDATE_SLD_STUDENT_PROGRAMS).eventPayload(JsonUtil.getJsonStringFromObject(SldUpdateStudentProgramsEvent.builder().pen(student.getPen()).sldStudentProgram(SldStudentProgram.builder().pen(trueStudent.getPen()).build()).build())).build();
-    var i = 0;
-    var isUpdated = false;
-    while (i < 3) {
-      try {
-        log.info("called SLD_API to update");
-        val sldStudentResponseData = this.messagePublisher.requestMessage(SLD_API_TOPIC, JsonUtil.getJsonBytesFromObject(updateSldStudentEvent)).completeOnTimeout(null, 5, TimeUnit.SECONDS).get();
-        val sldDiaStudentResponseData = this.messagePublisher.requestMessage(SLD_API_TOPIC, JsonUtil.getJsonBytesFromObject(updateDiaStudentsEvent)).completeOnTimeout(null, 5, TimeUnit.SECONDS).get();
-        val sldStudentProgramResponseData = this.messagePublisher.requestMessage(SLD_API_TOPIC, JsonUtil.getJsonBytesFromObject(updateStudentProgramsEvent)).completeOnTimeout(null, 5, TimeUnit.SECONDS).get();
-        if (sldStudentResponseData != null && sldDiaStudentResponseData != null && sldStudentProgramResponseData != null && sldDiaStudentResponseData.getData().length > 0 && sldStudentResponseData.getData().length > 0 && sldStudentProgramResponseData.getData().length > 0) {
-          log.info("got response for all 3 updates from SLD_API");
-          i = 3;
-          isUpdated = true;
-        }
-        i++;
-      } catch (final IOException | ExecutionException e) {
-        log.error("exception while updating sld data", e);
-        i++;
-      } catch (final InterruptedException e) {
-        Thread.currentThread().interrupt();
-        log.error("exception while updating sld data", e);
-        i++;
+    try {
+      log.info("called SLD_API to update");
+      val sldStudentResponseData = this.messagePublisher.requestMessage(SLD_API_TOPIC, JsonUtil.getJsonBytesFromObject(updateSldStudentEvent)).completeOnTimeout(null, 5, TimeUnit.SECONDS).get();
+      if (sldStudentResponseData == null) {
+        throw new BusinessException(BusinessError.SLD_UPDATE_FAILED); // it will be retried again.
       }
+      val sldDiaStudentResponseData = this.messagePublisher.requestMessage(SLD_API_TOPIC, JsonUtil.getJsonBytesFromObject(updateDiaStudentsEvent)).completeOnTimeout(null, 5, TimeUnit.SECONDS).get();
+      if (sldDiaStudentResponseData == null) {
+        throw new BusinessException(BusinessError.SLD_UPDATE_FAILED); // it will be retried again.
+      }
+      val sldStudentProgramResponseData = this.messagePublisher.requestMessage(SLD_API_TOPIC, JsonUtil.getJsonBytesFromObject(updateStudentProgramsEvent)).completeOnTimeout(null, 5, TimeUnit.SECONDS).get();
+      if (sldStudentProgramResponseData == null) {
+        throw new BusinessException(BusinessError.SLD_UPDATE_FAILED); // it will be retried again.
+      }
+      if (sldDiaStudentResponseData.getData().length > 0 && sldStudentResponseData.getData().length > 0 && sldStudentProgramResponseData.getData().length > 0) {
+        log.info("got response for all 3 updates from SLD_API");
+      }
+    } catch (final IOException | ExecutionException e) {
+      log.error("exception while updating sld data", e);
+    } catch (final InterruptedException e) {
+      Thread.currentThread().interrupt();
+      log.error("exception while updating sld data", e);
     }
-    if (!isUpdated) {
-      throw new BusinessException(BusinessError.SLD_UPDATE_FAILED); // it will be retried again.
-    }
+
 
   }
 
