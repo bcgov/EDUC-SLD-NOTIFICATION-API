@@ -19,6 +19,7 @@
       src/main/java/ca/bc/gov/educ/api/sld/notification/rest/**,
       src/main/java/ca/bc/gov/educ/api/sld/notification/util/**,
       src/main/java/ca/bc/gov/educ/api/sld/notification/struct/**,
+      src/main/java/ca/bc/gov/educ/api/sld/notification/helpers/**,
       src/main/java/ca/bc/gov/educ/api/sld/notification/ca.bc.gov.educ.api.sld.notification.SldNotificationApiResourceApplication.java,
     </sonar.exclusions>
     <java.version>11</java.version>

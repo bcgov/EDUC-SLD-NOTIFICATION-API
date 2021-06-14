@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 @Getter
 @Setter
 public class ApplicationProperties {
+  public static final String CORRELATION_ID = "correlationID";
   /**
    * The constant API_NAME.
    */

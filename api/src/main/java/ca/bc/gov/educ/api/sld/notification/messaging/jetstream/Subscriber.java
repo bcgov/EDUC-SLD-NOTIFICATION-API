@@ -1,5 +1,6 @@
 package ca.bc.gov.educ.api.sld.notification.messaging.jetstream;
 
+import ca.bc.gov.educ.api.sld.notification.helpers.LogHelper;
 import ca.bc.gov.educ.api.sld.notification.properties.ApplicationProperties;
 import ca.bc.gov.educ.api.sld.notification.service.EventHandlerDelegatorService;
 import ca.bc.gov.educ.api.sld.notification.struct.v1.ChoreographedEvent;
@@ -97,6 +98,7 @@ public class Subscriber {
       log.info("Received message Subject:: {} , SID :: {} , sequence :: {}, pending :: {} ", message.getSubject(), message.getSID(), message.metaData().consumerSequence(), message.metaData().pendingCount());
       try {
         val eventString = new String(message.getData());
+        LogHelper.logMessagingEventDetails(eventString);
         val event = JsonUtil.getJsonObjectFromString(ChoreographedEvent.class, eventString);
         if (event.getEventPayload() == null) {
           message.ack();
