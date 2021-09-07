@@ -42,6 +42,10 @@ public class StudentChoreographer {
     this.eventServiceMap = eventHandlerServices.stream().collect(Collectors.toMap(EventHandlerService::getEventType, Function.identity()));
   }
 
+  public boolean canHandleEvent(EventType eventType) {
+    return this.eventServiceMap.containsKey(eventType.toString());
+  }
+
   /**
    * Handle event.
    *
@@ -50,11 +54,7 @@ public class StudentChoreographer {
   public void handleEvent(@NonNull final EventEntity eventEntity) {
     this.taskExecutor.execute(() -> {
       try {
-        if ("CREATE_MERGE".equals(eventEntity.getEventType())) {
-          this.eventServiceMap.get(EventType.CREATE_MERGE.toString()).processEvent(eventEntity);
-        } else {
-          log.info("not interested in :: {} , so ignoring...", eventEntity.getEventType());
-        }
+        this.eventServiceMap.get(eventEntity.getEventType()).processEvent(eventEntity);
       } catch (final Exception exception) {
         log.error("Exception while processing event :: {}", eventEntity, exception);
       }

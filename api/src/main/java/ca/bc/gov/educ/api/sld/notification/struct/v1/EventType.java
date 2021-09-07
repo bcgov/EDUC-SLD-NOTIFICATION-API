@@ -45,4 +45,16 @@ public enum EventType {
    * The Update sld student programs.
    */
   UPDATE_SLD_STUDENT_PROGRAMS,
+  /**
+   * The Restore sld students.
+   */
+  RESTORE_SLD_STUDENTS,
+  /**
+   * The Restore sld dia students.
+   */
+  RESTORE_SLD_DIA_STUDENTS,
+  /**
+   * The Restore sld student programs.
+   */
+  RESTORE_SLD_STUDENT_PROGRAMS,
 }

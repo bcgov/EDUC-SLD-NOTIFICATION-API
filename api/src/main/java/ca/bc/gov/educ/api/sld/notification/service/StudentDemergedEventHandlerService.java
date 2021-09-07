@@ -14,11 +14,11 @@ import static ca.bc.gov.educ.api.sld.notification.struct.v1.EventType.*;
 
 
 /**
- * The type Student merged event handler service.
+ * The type Student demerged event handler service.
  */
 @Service
 @Slf4j
-public class StudentMergedEventHandlerService extends BaseStudentMergeEventHandlerService {
+public class StudentDemergedEventHandlerService extends BaseStudentMergeEventHandlerService {
 
 
   /**
@@ -29,19 +29,19 @@ public class StudentMergedEventHandlerService extends BaseStudentMergeEventHandl
    * @param messagePublisher      the message publisher
    */
   @Autowired
-  public StudentMergedEventHandlerService(final EventRepository eventRepository, final ApplicationProperties applicationProperties, final MessagePublisher messagePublisher) {
+  public StudentDemergedEventHandlerService(final EventRepository eventRepository, final ApplicationProperties applicationProperties, final MessagePublisher messagePublisher) {
     super(eventRepository, applicationProperties, messagePublisher);
   }
 
 
   @Override
   public String getEventType() {
-    return EventType.CREATE_MERGE.toString();
+    return EventType.DELETE_MERGE.toString();
   }
 
   @Override
   protected void processStudentsMergeInfo(final Student student, final Student trueStudent) throws BusinessException {
-    this.processStudentsMergeInfo(student, trueStudent, UPDATE_SLD_STUDENTS, UPDATE_SLD_DIA_STUDENTS, UPDATE_SLD_STUDENT_PROGRAMS);
+    this.processStudentsMergeInfo(student, trueStudent, RESTORE_SLD_STUDENTS, RESTORE_SLD_DIA_STUDENTS, RESTORE_SLD_STUDENT_PROGRAMS);
   }
 
 }
