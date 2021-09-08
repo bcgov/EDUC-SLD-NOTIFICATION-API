@@ -34,8 +34,6 @@ import java.util.concurrent.TimeoutException;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static ca.bc.gov.educ.api.sld.notification.struct.v1.EventType.*;
-
 /**
  * The type Base student merge event handler service.
  */
@@ -158,10 +156,10 @@ public abstract class BaseStudentMergeEventHandlerService implements EventHandle
    * @throws BusinessException the business exception
    */
   @SneakyThrows({JsonProcessingException.class})
-  private void processStudentsMergeInfo(final Student student, final Student trueStudent) throws BusinessException {
-    val updateSldStudentEvent = Event.builder().eventType(UPDATE_SLD_STUDENTS).eventPayload(JsonUtil.getJsonStringFromObject(SldUpdateStudentsEvent.builder().pen(student.getPen()).sldStudent(SldStudent.builder().pen(trueStudent.getPen()).build()).build())).build();
-    val updateDiaStudentsEvent = Event.builder().eventType(UPDATE_SLD_DIA_STUDENTS).eventPayload(JsonUtil.getJsonStringFromObject(SldUpdateDiaStudentsEvent.builder().pen(student.getPen()).sldDiaStudent(SldDiaStudent.builder().pen(trueStudent.getPen()).build()).build())).build();
-    val updateStudentProgramsEvent = Event.builder().eventType(UPDATE_SLD_STUDENT_PROGRAMS).eventPayload(JsonUtil.getJsonStringFromObject(SldUpdateStudentProgramsEvent.builder().pen(student.getPen()).sldStudentProgram(SldStudentProgram.builder().pen(trueStudent.getPen()).build()).build())).build();
+  protected void processStudentsMergeInfo(final Student student, final Student trueStudent, final EventType updateSldStudentEventType, final EventType updateDiaStudentsEventType, final EventType updateStudentProgramsEventType) throws BusinessException {
+    val updateSldStudentEvent = Event.builder().eventType(updateSldStudentEventType).eventPayload(JsonUtil.getJsonStringFromObject(SldUpdateStudentsEvent.builder().pen(student.getPen()).sldStudent(SldStudent.builder().pen(trueStudent.getPen()).build()).build())).build();
+    val updateDiaStudentsEvent = Event.builder().eventType(updateDiaStudentsEventType).eventPayload(JsonUtil.getJsonStringFromObject(SldUpdateDiaStudentsEvent.builder().pen(student.getPen()).sldDiaStudent(SldDiaStudent.builder().pen(trueStudent.getPen()).build()).build())).build();
+    val updateStudentProgramsEvent = Event.builder().eventType(updateStudentProgramsEventType).eventPayload(JsonUtil.getJsonStringFromObject(SldUpdateStudentProgramsEvent.builder().pen(student.getPen()).sldStudentProgram(SldStudentProgram.builder().pen(trueStudent.getPen()).build()).build())).build();
     try {
       log.info("called SLD_API to update");
       val sldStudentResponseData = this.messagePublisher.requestMessage(SLD_API_TOPIC, JsonUtil.getJsonBytesFromObject(updateSldStudentEvent)).completeOnTimeout(null, 5, TimeUnit.SECONDS).get();
@@ -185,8 +183,6 @@ public abstract class BaseStudentMergeEventHandlerService implements EventHandle
       Thread.currentThread().interrupt();
       log.error("exception while updating sld data", e);
     }
-
-
   }
 
   /**
@@ -198,5 +194,14 @@ public abstract class BaseStudentMergeEventHandlerService implements EventHandle
   private boolean mergeToPredicate(final StudentMerge studentMerge) {
     return StringUtils.equals(studentMerge.getStudentMergeDirectionCode(), "TO");
   }
+
+  /**
+   * Process students merge info.
+   *
+   * @param student     the student
+   * @param trueStudent the true student
+   * @throws BusinessException the business exception
+   */
+  protected abstract void processStudentsMergeInfo(final Student student, final Student trueStudent) throws BusinessException;
 
 }

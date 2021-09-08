@@ -45,14 +45,21 @@ public class EventHandlerDelegatorService {
    * @param message            the message
    */
   public void handleChoreographyEvent(@NonNull final ChoreographedEvent choreographedEvent, @NonNull final Message message) {
-    try {
-      final var persistedEvent = this.choreographedEventPersistenceService.persistEventToDB(choreographedEvent);
-      message.ack(); // acknowledge to Jet Stream that api got the message and it is now in DB.
-      log.info("acknowledged to Jet Stream...");
-      this.studentChoreographer.handleEvent(persistedEvent);
-    } catch (final BusinessException businessException) {
-      message.ack(); // acknowledge to Jet Stream that api got the message already...
-      log.info("acknowledged to  Jet Stream...");
+
+    if (this.studentChoreographer.canHandleEvent(choreographedEvent.getEventType())) {
+      try {
+        final var persistedEvent = this.choreographedEventPersistenceService.persistEventToDB(choreographedEvent);
+        message.ack(); // acknowledge to Jet Stream that api got the message and it is now in DB.
+        log.info("acknowledged to Jet Stream...");
+        this.studentChoreographer.handleEvent(persistedEvent);
+      } catch (final BusinessException businessException) {
+        message.ack(); // acknowledge to Jet Stream that api got the message already...
+        log.info("acknowledged to  Jet Stream...");
+      }
+    } else {
+      message.ack();
+      log.warn("API not interested in other events, ignoring event :: {}", choreographedEvent);
     }
+
   }
 }

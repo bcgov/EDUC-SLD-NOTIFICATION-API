@@ -4,7 +4,6 @@ import ca.bc.gov.educ.api.sld.notification.helpers.LogHelper;
 import ca.bc.gov.educ.api.sld.notification.properties.ApplicationProperties;
 import ca.bc.gov.educ.api.sld.notification.service.EventHandlerDelegatorService;
 import ca.bc.gov.educ.api.sld.notification.struct.v1.ChoreographedEvent;
-import ca.bc.gov.educ.api.sld.notification.struct.v1.EventType;
 import ca.bc.gov.educ.api.sld.notification.util.JsonUtil;
 import io.nats.client.Connection;
 import io.nats.client.JetStreamApiException;
@@ -105,12 +104,8 @@ public class Subscriber {
           log.warn("payload is null, ignoring event :: {}", event);
           return;
         }
-        if (event.getEventType().equals(EventType.CREATE_MERGE)) {
-          this.eventHandlerDelegatorService.handleChoreographyEvent(event, message);
-        } else {
-          message.ack();
-          log.warn("API not interested in other events, ignoring event :: {}", event);
-        }
+
+        this.eventHandlerDelegatorService.handleChoreographyEvent(event, message);
 
       } catch (final Exception ex) {
         log.error("Exception ", ex);
