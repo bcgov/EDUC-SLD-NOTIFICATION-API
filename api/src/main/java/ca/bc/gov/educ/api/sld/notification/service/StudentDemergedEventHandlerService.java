@@ -41,7 +41,7 @@ public class StudentDemergedEventHandlerService extends BaseStudentMergeEventHan
 
   @Override
   protected void processStudentsMergeInfo(final Student student, final Student trueStudent) throws BusinessException {
-    this.processStudentsMergeInfo(student, trueStudent, RESTORE_SLD_STUDENTS, RESTORE_SLD_DIA_STUDENTS, RESTORE_SLD_STUDENT_PROGRAMS);
+    this.processStudentsMergeInfo(student, trueStudent, RESTORE_SLD_STUDENTS, RESTORE_SLD_STUDENT_PROGRAMS);
   }
 
 }

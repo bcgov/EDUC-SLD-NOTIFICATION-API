@@ -3,7 +3,6 @@ package ca.bc.gov.educ.api.sld.notification.service;
 import ca.bc.gov.educ.api.sld.notification.messaging.MessagePublisher;
 import ca.bc.gov.educ.api.sld.notification.model.EventEntity;
 import ca.bc.gov.educ.api.sld.notification.repository.EventRepository;
-import ca.bc.gov.educ.api.sld.notification.struct.sld.v1.SldUpdateDiaStudentsEvent;
 import ca.bc.gov.educ.api.sld.notification.struct.sld.v1.SldUpdateStudentProgramsEvent;
 import ca.bc.gov.educ.api.sld.notification.struct.sld.v1.SldUpdateStudentsEvent;
 import ca.bc.gov.educ.api.sld.notification.struct.student.v1.Student;
@@ -18,7 +17,6 @@ import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -70,9 +68,9 @@ public class StudentMergedEventHandlerServiceTest {
     when(this.messagePublisher.requestMessage(eq("STUDENT_API_TOPIC"), any())).thenReturn(CompletableFuture.completedFuture(studentMessage));
     when(this.messagePublisher.requestMessage(eq("SLD_API_TOPIC"), any())).thenReturn(CompletableFuture.completedFuture(sldMessage));
     this.studentMergedEventHandlerService.processEvent(eventEntity);
-    verify(this.messagePublisher, atLeast(3)).requestMessage(eq("SLD_API_TOPIC"), eventCaptor.capture());
+    verify(this.messagePublisher, atLeast(2)).requestMessage(eq("SLD_API_TOPIC"), eventCaptor.capture());
     final var sldRequests = eventCaptor.getAllValues();
-    assertThat(sldRequests).size().isEqualTo(3);
+    assertThat(sldRequests).size().isEqualTo(2);
 
     final var updateSldStudentEvent = JsonUtil.getJsonObjectFromString(Event.class, new String(sldRequests.get(0)));
     assertThat(updateSldStudentEvent).isNotNull();
@@ -81,14 +79,7 @@ public class StudentMergedEventHandlerServiceTest {
     assertThat(updateSldStudentEventPayload.getPen()).isEqualTo("123456781");
     assertThat(updateSldStudentEventPayload.getSldStudent().getPen()).isEqualTo("123456782");
 
-    final var updateDiaStudentsEvent = JsonUtil.getJsonObjectFromString(Event.class, new String(sldRequests.get(1)));
-    assertThat(updateDiaStudentsEvent).isNotNull();
-    assertThat(updateDiaStudentsEvent.getEventType()).isEqualTo(UPDATE_SLD_DIA_STUDENTS);
-    final var updateDiaStudentsEventPayload = JsonUtil.getJsonObjectFromString(SldUpdateDiaStudentsEvent.class, updateDiaStudentsEvent.getEventPayload());
-    assertThat(updateDiaStudentsEventPayload.getPen()).isEqualTo("123456781");
-    assertThat(updateDiaStudentsEventPayload.getSldDiaStudent().getPen()).isEqualTo("123456782");
-
-    final var updateStudentProgramsEvent = JsonUtil.getJsonObjectFromString(Event.class, new String(sldRequests.get(2)));
+    final var updateStudentProgramsEvent = JsonUtil.getJsonObjectFromString(Event.class, new String(sldRequests.get(1)));
     assertThat(updateStudentProgramsEvent).isNotNull();
     assertThat(updateStudentProgramsEvent.getEventType()).isEqualTo(UPDATE_SLD_STUDENT_PROGRAMS);
     final var updateStudentProgramsEventPayload = JsonUtil.getJsonObjectFromString(SldUpdateStudentProgramsEvent.class, updateStudentProgramsEvent.getEventPayload());
