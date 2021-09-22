@@ -156,9 +156,8 @@ public abstract class BaseStudentMergeEventHandlerService implements EventHandle
    * @throws BusinessException the business exception
    */
   @SneakyThrows({JsonProcessingException.class})
-  protected void processStudentsMergeInfo(final Student student, final Student trueStudent, final EventType updateSldStudentEventType, final EventType updateDiaStudentsEventType, final EventType updateStudentProgramsEventType) throws BusinessException {
+  protected void processStudentsMergeInfo(final Student student, final Student trueStudent, final EventType updateSldStudentEventType, final EventType updateStudentProgramsEventType) throws BusinessException {
     val updateSldStudentEvent = Event.builder().eventType(updateSldStudentEventType).eventPayload(JsonUtil.getJsonStringFromObject(SldUpdateStudentsEvent.builder().pen(student.getPen()).sldStudent(SldStudent.builder().pen(trueStudent.getPen()).build()).build())).build();
-    val updateDiaStudentsEvent = Event.builder().eventType(updateDiaStudentsEventType).eventPayload(JsonUtil.getJsonStringFromObject(SldUpdateDiaStudentsEvent.builder().pen(student.getPen()).sldDiaStudent(SldDiaStudent.builder().pen(trueStudent.getPen()).build()).build())).build();
     val updateStudentProgramsEvent = Event.builder().eventType(updateStudentProgramsEventType).eventPayload(JsonUtil.getJsonStringFromObject(SldUpdateStudentProgramsEvent.builder().pen(student.getPen()).sldStudentProgram(SldStudentProgram.builder().pen(trueStudent.getPen()).build()).build())).build();
     try {
       log.info("called SLD_API to update");
@@ -166,16 +165,13 @@ public abstract class BaseStudentMergeEventHandlerService implements EventHandle
       if (sldStudentResponseData == null) {
         throw new BusinessException(BusinessError.SLD_UPDATE_FAILED); // it will be retried again.
       }
-      val sldDiaStudentResponseData = this.messagePublisher.requestMessage(SLD_API_TOPIC, JsonUtil.getJsonBytesFromObject(updateDiaStudentsEvent)).completeOnTimeout(null, 5, TimeUnit.SECONDS).get();
-      if (sldDiaStudentResponseData == null) {
-        throw new BusinessException(BusinessError.SLD_UPDATE_FAILED); // it will be retried again.
-      }
+
       val sldStudentProgramResponseData = this.messagePublisher.requestMessage(SLD_API_TOPIC, JsonUtil.getJsonBytesFromObject(updateStudentProgramsEvent)).completeOnTimeout(null, 5, TimeUnit.SECONDS).get();
       if (sldStudentProgramResponseData == null) {
         throw new BusinessException(BusinessError.SLD_UPDATE_FAILED); // it will be retried again.
       }
-      if (sldDiaStudentResponseData.getData().length > 0 && sldStudentResponseData.getData().length > 0 && sldStudentProgramResponseData.getData().length > 0) {
-        log.info("got response for all 3 updates from SLD_API");
+      if (sldStudentResponseData.getData().length > 0 && sldStudentProgramResponseData.getData().length > 0) {
+        log.info("got response for all 2 updates from SLD_API");
       }
     } catch (final IOException | ExecutionException e) {
       log.error("exception while updating sld data", e);
