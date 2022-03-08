@@ -1,8 +1,12 @@
 package ca.bc.gov.educ.api.sld.notification.schedulers;
 
+import static java.util.stream.Collectors.toList;
+
 import ca.bc.gov.educ.api.sld.notification.choreographer.StudentChoreographer;
 import ca.bc.gov.educ.api.sld.notification.constants.EventStatus;
+import ca.bc.gov.educ.api.sld.notification.model.EventEntity;
 import ca.bc.gov.educ.api.sld.notification.repository.EventRepository;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import net.javacrumbs.shedlock.core.LockAssert;
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
@@ -49,9 +53,14 @@ public class JetStreamEventScheduler {
     ".stan.lockAtMostFor}")
   public void findAndProcessEvents() {
     LockAssert.assertLocked();
-    this.eventRepository.findAllByEventStatusOrderByCreateDate(EventStatus.DB_COMMITTED.toString())
-      .stream()
-      .filter(el -> el.getUpdateDate().isBefore(LocalDateTime.now().minusMinutes(5)))
-      .forEach(this.studentChoreographer::handleEvent);
+    List<EventEntity> results = this.eventRepository.findAllByEventStatusOrderByCreateDate(EventStatus.DB_COMMITTED.toString())
+        .stream()
+        .filter(el -> el.getUpdateDate().isBefore(LocalDateTime.now().minusMinutes(5)))
+        .collect(toList());
+
+    if (!results.isEmpty()) {
+      log.info("found {} choreographed events which needs to be processed in SLD-NOTIFICATION-API.", results.size());
+      results.forEach(this.studentChoreographer::handleEvent);
+    }
   }
 }
