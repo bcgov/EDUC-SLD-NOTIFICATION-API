@@ -135,7 +135,7 @@ public abstract class BaseStudentMergeEventHandlerService implements EventHandle
 
 
     log.info("got response from STUDENT_API  :: {}", responseEvent);
-    if (responseEvent.getEventOutcome() == EventOutcome.STUDENT_NOT_FOUND) {
+    if (responseEvent.getEventOutcome() == EventOutcome.STUDENTS_NOT_FOUND) {
       log.error("Students not found or student size mismatch for student IDs:: {}, this should not have happened", studentIDs);
       throw new BusinessException(BusinessError.STUDENT_NOT_FOUND);
     }
